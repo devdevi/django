@@ -34,14 +34,9 @@ SERVER_URL = os.getenv("SERVER_URL", default="*")
 
 
 APPEND_SLASH = False
-# Admin
-ADMIN_URL = 'admin/'
-ADMINS = [
-    ("""Pablo Trinidad""", 'pablotrinidad@ciencias.unam.mx'),
-]
-# Application definition
 
-INSTALLED_APPS = [
+# Application definition
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,9 +44,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "django_extensions",
-    "backend_test.utils",
+    "django_extensions"
 ]
+
+LOCAL_APPS = [
+    "backend_test.utils",
+    "backend_test.users.apps.UsersAppConfig",
+    "backend_test.menus.apps.MenusAppConfig"
+]
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "backend_test.middleware.HealthCheckAwareSessionMiddleware",
@@ -84,6 +85,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "backend_test.wsgi.application"
+
+# Users & Authentication
+AUTH_USER_MODEL = 'users.User'
 
 
 # Database
@@ -154,7 +158,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
-    ],
+    ]
 }
 
 if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
@@ -239,3 +243,13 @@ LOGGING = {
         },
     },
 }
+
+SLACK = "https://hooks.slack.com/services/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"
+
+# Admin
+ADMIN_URL = 'admin/'
+ADMINS = [
+    ("""Pablo Trinidad""", 'pablotrinidad@ciencias.unam.mx'),
+]
+MANAGERS = ADMINS
+ADMIN_ENABLED = True
